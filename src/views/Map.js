@@ -5,8 +5,7 @@ import makeStyles from '@mui/styles/makeStyles';
 import { GoogleMap, useLoadScript } from '@react-google-maps/api';
 import DisplaySettingsIcon from '@mui/icons-material/DisplaySettings';
 import { MAP_API_KEY } from '@utils/constants';
-import RouteRender from './RouteRender';
-import Controller from './Controller';
+import { RouteRender, Controller } from '@components/templates';
 
 const useStyles = makeStyles(() => ({
   root: {

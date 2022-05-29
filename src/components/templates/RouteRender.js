@@ -4,7 +4,7 @@ import useNavigationData from '@hooks/useNavigationData';
 import { SvgIcon, Typography, Paper, Button } from '@mui/material';
 import PropTypes from 'prop-types';
 import Popper from '@mui/material/Popper';
-import { ReactComponent as Logo } from '../assets/car.svg';
+import { ReactComponent as Logo } from '../../assets/car.svg';
 
 const options = {
   strokeColor: '#FF0000',
