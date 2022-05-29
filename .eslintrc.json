@@ -1,0 +1,71 @@
+{
+  "env": {
+    "browser": true,
+    "es2021": true
+  },
+  "extends": ["plugin:react/recommended", "airbnb", "prettier"],
+  "settings": {
+    "import/resolver": {
+      "alias": {
+        "map": [
+          ["@utils", "./src/utils"],
+          ["@components", "./src/components"],
+          ["@container", "./src/container"],
+          ["@store", "./src/store"],
+          ["@views", "./src/views"],
+          ["@styles", "./src/styles"],
+          ["@assets", "./src/assets"],
+          ["@hooks", "./src/hooks"],
+          ["@services", "./src/services"],
+          ["@routes", "./src/routes"]
+        ],
+        "extensions": [".js", ".jsx", ".json"]
+      }
+    }
+  },
+  "parserOptions": {
+    "ecmaFeatures": {
+      "jsx": true
+    },
+    "ecmaVersion": 12,
+    "sourceType": "module"
+  },
+  "plugins": ["react", "prettier"],
+  "rules": {
+    "prettier/prettier": [
+      "warn",
+      {
+        "endOfLine": "auto"
+      }
+    ],
+    "import/no-extraneous-dependencies": "off",
+    "react/forbid-prop-types": "off",
+    "eslintreact/no-unused-prop-types": "off",
+    "react/jsx-props-no-spreading": "off",
+    "jsx-a11y/anchor-is-valid": "warn",
+
+    "jsx-a11y/href-no-hash": ["off"],
+    "react/react-in-jsx-scope": "off",
+    "no-debugger": "warn",
+    "react/jsx-filename-extension": ["warn", { "extensions": [".js", ".jsx"] }],
+    "no-underscore-dangle": ["error", { "allow": ["_id"] }],
+    "no-unused-vars": "warn",
+    "no-console": "warn",
+    "import/prefer-default-export": "off",
+    "react/require-default-props": "warn",
+    "max-len": [
+      "warn",
+      {
+        "code": 80,
+        "tabWidth": 2,
+        "comments": 80,
+        "ignoreComments": false,
+        "ignoreTrailingComments": true,
+        "ignoreUrls": true,
+        "ignoreStrings": true,
+        "ignoreTemplateLiterals": true,
+        "ignoreRegExpLiterals": true
+      }
+    ]
+  }
+}
