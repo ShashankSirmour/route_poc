@@ -1,6 +1,7 @@
 import React from 'react';
 
 import {
+  ButtonBase,
   Divider,
   Grid,
   IconButton,
@@ -12,6 +13,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import PauseCircleIcon from '@mui/icons-material/PauseCircle';
 import PlayCircleIcon from '@mui/icons-material/PlayCircle';
 import PropTypes from 'prop-types';
+import makeStyles from '@mui/styles/makeStyles';
 
 const marks = [
   {
@@ -40,6 +42,15 @@ function valuetext(value) {
   return `Speed ${value}X`;
 }
 
+const useStyles = makeStyles(() => ({
+  circle: {
+    height: '10px',
+    width: '10px',
+    backgroundColor: 'green',
+    borderRadius: '50%',
+    marginRight: 10,
+  },
+}));
 export default function Controller({
   speed,
   pause,
@@ -47,6 +58,7 @@ export default function Controller({
   speedChangeHandler,
   setPaueHandler,
 }) {
+  const classes = useStyles();
   return (
     <Grid
       container
@@ -79,7 +91,17 @@ export default function Controller({
             </IconButton>
           </Grid>
           <Divider />
-
+          <Grid item>
+            <ButtonBase
+              sx={{ width: 1, py: 2 }}
+              // onClick={() => setPaueHandler(false)}
+            >
+              <Grid container wrap="nowrap">
+                <div className={classes.circle} />
+                <div>AB10045 TC DD- MH</div>
+              </Grid>
+            </ButtonBase>
+          </Grid>
           <Grid item style={{ flexGrow: 1 }} />
 
           <Grid item container direction="column">

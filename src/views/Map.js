@@ -11,6 +11,7 @@ const useStyles = makeStyles(() => ({
   root: {
     height: '100vh',
   },
+  fab: { top: '0', left: '0', margin: '2%' },
 }));
 
 const getMapOptions = {
@@ -86,7 +87,7 @@ export default function Map() {
           )}
           {!expand && (
             <Fab
-              style={{ top: '0', left: '0', margin: '2%' }}
+              className={classes.fab}
               color="primary"
               onClick={() => setExpand(true)}
             >

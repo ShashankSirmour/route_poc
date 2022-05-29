@@ -1,9 +1,11 @@
 import React, { memo, useRef } from 'react';
 import { OverlayView, Polyline } from '@react-google-maps/api';
 import useNavigationData from '@hooks/useNavigationData';
-import { SvgIcon, Typography, Paper, Button } from '@mui/material';
+import { SvgIcon, Paper, Grid, Typography } from '@mui/material';
 import PropTypes from 'prop-types';
 import Popper from '@mui/material/Popper';
+import SpeedIcon from '@mui/icons-material/Speed';
+import DateRangeIcon from '@mui/icons-material/DateRange';
 import { ReactComponent as Logo } from '../../assets/car.svg';
 
 const options = {
@@ -21,14 +23,15 @@ const options = {
 };
 
 function RouteRender({ speed, pause, setCenterPoint }) {
-  const { path, isLoading, isFetched } = useNavigationData({
+  const { path, isLoading, isFetched, routeStarted } = useNavigationData({
     speed,
     pause,
     setCenterPoint,
   });
 
   const arrowRef = useRef(null);
-  if (!isLoading && isFetched) {
+
+  if (!isLoading && isFetched && routeStarted) {
     return (
       <>
         <Polyline path={path.path} options={options} />
@@ -73,11 +76,24 @@ function RouteRender({ speed, pause, setCenterPoint }) {
                 },
               ]}
             >
-              <Paper sx={{ width: '100%' }}>
-                <Typography sx={{ p: 2 }}>
-                  The content of the Popper.
-                </Typography>
-                <Button>click</Button>
+              <Paper sx={{ width: 'auto', p: 1 }}>
+                <Grid container wrap="nowrap" spacing={1}>
+                  <Grid item container direction="column" minWidth={90}>
+                    <Grid item container wrap="nowrap">
+                      <SpeedIcon fontSize="small" sx={{ mr: 0.5 }} />
+                      <Typography>Speed</Typography>
+                    </Grid>
+
+                    <Typography>{path?.sp}km/hr</Typography>
+                  </Grid>
+                  <Grid item container direction="column" minWidth={160}>
+                    <Grid item container wrap="nowrap">
+                      <DateRangeIcon fontSize="small" sx={{ mr: 0.5 }} />
+                      <Typography>Date</Typography>
+                    </Grid>
+                    <Typography>{path?.timestamp?.toLocaleString()}</Typography>
+                  </Grid>
+                </Grid>
               </Paper>
             </Popper>
           </>

@@ -45,6 +45,8 @@ export default function useNavigationData({ speed, pause, setCenterPoint }) {
     path: [],
     marker: {},
     rotation: 0,
+    sp: 0,
+    timestamp: '',
   });
 
   const getDataPoint = useCallback((index) => data.at(index), [data]);
@@ -69,7 +71,10 @@ export default function useNavigationData({ speed, pause, setCenterPoint }) {
             return arr;
           }, []) || [];
 
-        const rotation = dataPoint?.sp || 0;
+        const rotation = dataPoint?.hd || 0;
+        const sp = dataPoint?.sp || '';
+        const timestamp =
+          dataPoint?.timestamp && new Date(dataPoint?.timestamp);
         const marker = {
           lat: dataPoint.loc.coordinates[0],
           lng: dataPoint.loc.coordinates[1],
@@ -82,6 +87,8 @@ export default function useNavigationData({ speed, pause, setCenterPoint }) {
           path: [...p.path, ...paths],
           marker,
           rotation,
+          sp,
+          timestamp,
         }));
 
         countRef.current += 1;
@@ -93,5 +100,6 @@ export default function useNavigationData({ speed, pause, setCenterPoint }) {
     return () => intervelRef.current && clearInterval(intervelRef.current);
   }, [speed, count, getDataPoint, pause]);
 
-  return { path, isLoading, isFetched };
+  const routeStarted = countRef.current > 0;
+  return { path, isLoading, isFetched, routeStarted };
 }
