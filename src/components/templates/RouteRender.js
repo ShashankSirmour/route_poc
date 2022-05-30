@@ -22,11 +22,12 @@ const options = {
   zIndex: 1,
 };
 
-function RouteRender({ speed, pause, setCenterPoint }) {
+function RouteRender({ speed, pause, setCenterPoint, paueHandler }) {
   const { path, isLoading, isFetched } = useNavigationData({
     speed,
     pause,
     setCenterPoint,
+    paueHandler,
   });
 
   const arrowRef = useRef(null);
@@ -109,12 +110,14 @@ RouteRender.defaultProps = {
   speed: 1,
   pause: false,
   setCenterPoint: () => {},
+  paueHandler: () => {},
 };
 
 RouteRender.propTypes = {
   speed: PropTypes.number,
   setCenterPoint: PropTypes.func,
   pause: PropTypes.bool,
+  paueHandler: PropTypes.func,
 };
 
 export default memo(RouteRender);

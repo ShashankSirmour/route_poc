@@ -75,6 +75,7 @@ export default function Map() {
             speed={speed}
             setCenterPoint={setCenterPoint}
             pause={pause}
+            paueHandler={setPaueHandler}
           />
           {expand && (
             <Controller

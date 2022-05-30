@@ -10,7 +10,12 @@ const initState = {
   timestamp: '',
 };
 
-export default function useNavigationData({ speed, pause, setCenterPoint }) {
+export default function useNavigationData({
+  speed,
+  pause,
+  setCenterPoint,
+  paueHandler,
+}) {
   const dispatch = useDispatch();
   const {
     data,
@@ -44,9 +49,11 @@ export default function useNavigationData({ speed, pause, setCenterPoint }) {
         lat: dataPoint.loc.coordinates[0],
         lng: dataPoint.loc.coordinates[1],
       };
+
       const rotation = dataPoint?.hd || 0;
       setPath({ ...initState, marker, rotation });
       setCenterPoint(marker);
+      paueHandler(true);
     }
   }, [startIndex, endIndex, isLoading, isFetched, getDataPoint]);
 
