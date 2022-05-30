@@ -49,9 +49,10 @@ export default function useNavigationData({
         lat: dataPoint.loc.coordinates[0],
         lng: dataPoint.loc.coordinates[1],
       };
-
+      const sp = dataPoint?.sp || '';
+      const timestamp = dataPoint?.timestamp && new Date(dataPoint?.timestamp);
       const rotation = dataPoint?.hd || 0;
-      setPath({ ...initState, marker, rotation });
+      setPath({ ...initState, marker, rotation, sp, timestamp });
       setCenterPoint(marker);
       paueHandler(true);
     }
