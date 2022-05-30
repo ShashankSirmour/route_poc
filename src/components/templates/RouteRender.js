@@ -23,7 +23,7 @@ const options = {
 };
 
 function RouteRender({ speed, pause, setCenterPoint }) {
-  const { path, isLoading, isFetched, routeStarted } = useNavigationData({
+  const { path, isLoading, isFetched } = useNavigationData({
     speed,
     pause,
     setCenterPoint,
@@ -31,7 +31,7 @@ function RouteRender({ speed, pause, setCenterPoint }) {
 
   const arrowRef = useRef(null);
 
-  if (!isLoading && isFetched && routeStarted) {
+  if (!isLoading && isFetched) {
     return (
       <>
         <Polyline path={path.path} options={options} />

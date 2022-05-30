@@ -2,29 +2,13 @@ import { fetchRouteData } from '@store/route';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
-export function findGreatestAndSmallestIndex(arr, target, smallest) {
-  let low = 0;
-
-  let high = arr.length - 1;
-  while (low !== high) {
-    const mid = Math.floor((low + high) / 2);
-
-    if (arr[mid] === target) {
-      return mid;
-    }
-
-    if (arr[mid] < target) {
-      low = mid + 1;
-    } else {
-      high = mid;
-    }
-  }
-
-  if (smallest && low !== 0 && arr[arr.length - 1] > target) {
-    return low - 1;
-  }
-  return low;
-}
+const initState = {
+  path: [],
+  marker: {},
+  rotation: 0,
+  sp: 0,
+  timestamp: '',
+};
 
 export default function useNavigationData({ speed, pause, setCenterPoint }) {
   const dispatch = useDispatch();
@@ -32,24 +16,44 @@ export default function useNavigationData({ speed, pause, setCenterPoint }) {
     data,
     loading: isLoading,
     fetched: isFetched,
+    startIndex,
+    endIndex,
   } = useSelector((store) => store.route);
+
   const intervelRef = useRef(null);
   const countRef = useRef(0);
   useEffect(() => {
     dispatch(fetchRouteData());
   }, []);
 
-  const count = useMemo(() => data.length, [data]);
+  const [path, setPath] = useState(initState);
 
-  const [path, setPath] = useState({
-    path: [],
-    marker: {},
-    rotation: 0,
-    sp: 0,
-    timestamp: '',
-  });
+  const getDataPoint = useCallback(
+    (currentCount) => data.at(startIndex + currentCount),
+    [startIndex, data],
+  );
 
-  const getDataPoint = useCallback((index) => data.at(index), [data]);
+  useEffect(() => {
+    // reset and set center to first point
+    if (startIndex <= endIndex && !isLoading && isFetched) {
+      // reset state
+
+      countRef.current = 0;
+      const dataPoint = getDataPoint(0);
+      const marker = {
+        lat: dataPoint.loc.coordinates[0],
+        lng: dataPoint.loc.coordinates[1],
+      };
+      const rotation = dataPoint?.hd || 0;
+      setPath({ ...initState, marker, rotation });
+      setCenterPoint(marker);
+    }
+  }, [startIndex, endIndex, isLoading, isFetched, getDataPoint]);
+
+  const count = useMemo(
+    () => endIndex - startIndex + 1,
+    [endIndex, startIndex],
+  );
 
   useEffect(() => {
     if (count > 0 && countRef.current <= count && !pause) {
@@ -100,6 +104,5 @@ export default function useNavigationData({ speed, pause, setCenterPoint }) {
     return () => intervelRef.current && clearInterval(intervelRef.current);
   }, [speed, count, getDataPoint, pause]);
 
-  const routeStarted = countRef.current > 0;
-  return { path, isLoading, isFetched, routeStarted };
+  return { path, isLoading, isFetched };
 }

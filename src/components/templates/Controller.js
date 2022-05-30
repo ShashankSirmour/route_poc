@@ -7,13 +7,26 @@ import {
   IconButton,
   Paper,
   Slider,
+  TextField,
+  Tooltip,
   Typography,
 } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import PauseCircleIcon from '@mui/icons-material/PauseCircle';
 import PlayCircleIcon from '@mui/icons-material/PlayCircle';
 import PropTypes from 'prop-types';
+import RestartAltIcon from '@mui/icons-material/RestartAlt';
 import makeStyles from '@mui/styles/makeStyles';
+import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
+import { useDispatch, useSelector } from 'react-redux';
+
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import {
+  initDateReset,
+  initEndDateChange,
+  initStartDateChange,
+} from '@store/route';
 
 const marks = [
   {
@@ -59,6 +72,11 @@ export default function Controller({
   setPaueHandler,
 }) {
   const classes = useStyles();
+  const dispatch = useDispatch();
+  const { startTime, endTime, minTime, maxTime } = useSelector(
+    (store) => store.route,
+  );
+
   return (
     <Grid
       container
@@ -73,72 +91,123 @@ export default function Controller({
         height: '94%',
       }}
     >
-      <Paper sx={{ p: 1, width: { md: '20vw', xs: '96%' }, height: '100%' }}>
-        <Grid container direction="column" height="100%">
-          <Grid
-            item
-            container
-            alignItems="center"
-            justifyContent="space-between"
-          >
-            <Typography variant="h4">Control</Typography>
-            <IconButton
-              color="primary"
-              component="span"
-              onClick={onControllerClose}
-            >
-              <CloseIcon />
-            </IconButton>
-          </Grid>
-          <Divider />
-          <Grid item>
-            <ButtonBase
-              sx={{ width: 1, py: 2 }}
-              // onClick={() => setPaueHandler(false)}
-            >
-              <Grid container wrap="nowrap">
-                <div className={classes.circle} />
-                <div>AB10045 TC DD- MH</div>
-              </Grid>
-            </ButtonBase>
-          </Grid>
-          <Grid item style={{ flexGrow: 1 }} />
-
-          <Grid item container direction="column">
+      <LocalizationProvider dateAdapter={AdapterDateFns}>
+        <Paper sx={{ p: 1, width: { md: '20vw', xs: '96%' }, height: '100%' }}>
+          <Grid container direction="column" height="100%">
             <Grid
               item
               container
-              wrap="nowrap"
               alignItems="center"
               justifyContent="space-between"
             >
-              <Typography variant="overline" fontSize=".9rem">
-                Animation
-              </Typography>
+              <Typography variant="h4">Control</Typography>
               <IconButton
                 color="primary"
                 component="span"
-                onClick={() => setPaueHandler(!pause)}
+                onClick={onControllerClose}
               >
-                {pause ? <PlayCircleIcon /> : <PauseCircleIcon />}
+                <CloseIcon />
               </IconButton>
-            </Grid>{' '}
-            <Grid item sx={{ p: 2 }}>
-              <Slider
-                onChange={speedChangeHandler}
-                defaultValue={1}
-                step={1}
-                value={speed}
-                valueLabelFormat={valuetext}
-                valueLabelDisplay="auto"
-                marks={marks}
-                min={1}
-                max={5}
-              />
+            </Grid>
+            <Divider />
+            <Grid item>
+              <ButtonBase
+                sx={{ width: 1, py: 2 }}
+                // onClick={() => setPaueHandler(false)}
+              >
+                <Grid container wrap="nowrap">
+                  <div className={classes.circle} />
+                  <div>AB10045 TC DD- MH</div>
+                </Grid>
+              </ButtonBase>
+            </Grid>
+            <Grid item style={{ flexGrow: 1 }} />
+            <Grid item container direction="column">
+              <Grid
+                item
+                container
+                wrap="nowrap"
+                alignItems="center"
+                justifyContent="space-between"
+              >
+                <Typography variant="overline" fontSize=".9rem">
+                  Time
+                </Typography>
+                <Tooltip title="Reset Time" arrow placement="right">
+                  <IconButton
+                    color="primary"
+                    component="span"
+                    onClick={() => dispatch(initDateReset())}
+                  >
+                    <RestartAltIcon />
+                  </IconButton>
+                </Tooltip>
+              </Grid>
+              <Grid item p={2} container spacing={2}>
+                <Grid item>
+                  <DateTimePicker
+                    renderInput={(params) => <TextField {...params} />}
+                    label="Start date and time"
+                    value={startTime}
+                    minDateTime={minTime}
+                    maxDateTime={endTime}
+                    onChange={(newValue) => {
+                      // setVa=lue(newValue);
+                      dispatch(initStartDateChange(newValue));
+                    }}
+                  />
+                </Grid>
+                <Grid item>
+                  <DateTimePicker
+                    renderInput={(params) => <TextField {...params} />}
+                    label="End date and time"
+                    value={endTime}
+                    minDateTime={startTime}
+                    maxDateTime={maxTime}
+                    onChange={(newValue) => {
+                      dispatch(initEndDateChange(newValue));
+                    }}
+                  />
+                </Grid>
+              </Grid>
+            </Grid>
+
+            <Grid item container direction="column">
+              <Grid
+                item
+                container
+                wrap="nowrap"
+                alignItems="center"
+                justifyContent="space-between"
+              >
+                <Typography variant="overline" fontSize=".9rem">
+                  Animation
+                </Typography>
+                <IconButton
+                  color="primary"
+                  component="span"
+                  onClick={() => setPaueHandler(!pause)}
+                >
+                  {pause ? <PlayCircleIcon /> : <PauseCircleIcon />}
+                </IconButton>
+              </Grid>
+              <Grid item p={2}>
+                <Slider
+                  onChange={speedChangeHandler}
+                  defaultValue={1}
+                  step={1}
+                  value={speed}
+                  valueLabelFormat={valuetext}
+                  valueLabelDisplay="auto"
+                  marks={marks}
+                  min={1}
+                  max={5}
+                />
+              </Grid>
             </Grid>
           </Grid>
-        </Grid>
-      </Paper>
+        </Paper>
+      </LocalizationProvider>
     </Grid>
   );
 }

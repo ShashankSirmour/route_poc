@@ -67,7 +67,7 @@ export default function Map() {
             width: '100%',
             position: 'relative',
           }}
-          zoom={13}
+          zoom={14}
           center={center}
           options={getMapOptions}
         >
